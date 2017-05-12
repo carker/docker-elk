@@ -6,11 +6,12 @@ services:
     build: elasticsearch/
     volumes:
       - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./data:/usr/share/elasticsearch/data
     ports:
       - "9200:9200"
       - "9300:9300"
     environment:
-      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      ES_JAVA_OPTS: "-Xmx1g -Xms1g"
     networks:
       - elk
 
@@ -22,7 +23,7 @@ services:
     ports:
       - "5000:5000"
     environment:
-      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+      LS_JAVA_OPTS: "-Xmx1g -Xms1g"
     networks:
       - elk
     depends_on:
