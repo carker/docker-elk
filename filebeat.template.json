@@ -1,0 +1,28 @@
+{
+    "template": "filebeat-*",
+    "settings": {
+        "index.refresh_interval": "5s",
+        "index.codec": "best_compression",
+        "number_of_shards": 5,
+        "number_of_replicas": 0
+    },
+    "mappings": {
+        "_default_": {
+            "dynamic_templates": [{
+                "string_fields": {
+                    "mapping": {
+                        "index": "not_analyzed",
+                        "type": "string",
+                        "doc_values": true
+                    },
+                    "match_mapping_type": "string",
+                    "match": "*"
+                }
+            }],
+            "_all": {
+                "enabled": false
+            }
+        }
+    },
+    "aliases": {}
+}

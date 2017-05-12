@@ -1,0 +1,3 @@
+TIMESTAMP_MY %{YEAR}-%{MONTHNUM}-%{MONTHDAY}[T ]%{HOUR}:?%{MINUTE}:%{SECOND}\.%{INT}?
+REQ [^)]*
+

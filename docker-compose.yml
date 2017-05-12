@@ -20,8 +20,9 @@ services:
     volumes:
       - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
       - ./logstash/pipeline:/usr/share/logstash/pipeline
+      - ./logstash/pattern:/usr/share/logstash/pattern
     ports:
-      - "5000:5000"
+      - "5044:5044"
     environment:
       LS_JAVA_OPTS: "-Xmx1g -Xms1g"
     networks:
