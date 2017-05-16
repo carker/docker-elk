@@ -1,6 +1,7 @@
 #!/bin/sh
 
 set -e
+ELASTICSEARCH_HOST=elasticsearch
 
 # Set the timezone.
 if [ "$SET_CONTAINER_TIMEZONE" = "true" ]; then
@@ -17,6 +18,7 @@ fi
 
 # Wait until Elasticsearch is online since otherwise Elastalert will fail.
 rm -f garbage_file
+echo "wget -O garbage_file ${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"
 while ! wget -O garbage_file ${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT} 2>/dev/null
 do
 	echo "Waiting for Elasticsearch..."
@@ -27,9 +29,11 @@ rm -f garbage_file
 sleep 5
 
 # Check if the Elastalert index exists in Elasticsearch and create it if it does not.
+echo "elastalert_config = ${ELASTALERT_CONFIG}"
 if ! wget -O garbage_file ${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}/elastalert_status 2>/dev/null
 then
 	echo "Creating Elastalert index in Elasticsearch..."
+    echo "elastalert-create-index --host ${ELASTICSEARCH_HOST} --port ${ELASTICSEARCH_PORT} --config ${ELASTALERT_CONFIG} --index elastalert_status --old-index"
     elastalert-create-index --host ${ELASTICSEARCH_HOST} --port ${ELASTICSEARCH_PORT} --config ${ELASTALERT_CONFIG} --index elastalert_status --old-index ""
 else
     echo "Elastalert index already exists in Elasticsearch."
