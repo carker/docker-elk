@@ -1,1 +1,1 @@
-FROM fengyajie/elastalert
+FROM fengyajie/elastalert:1.14

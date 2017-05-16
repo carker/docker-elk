@@ -30,13 +30,11 @@ ENV BIN_DIR /opt/bin
 
 WORKDIR /opt
 
-
 # set pip sources
 RUN mkdir /root/.pip 
 ADD ./pip.conf /root/.pip/pip.conf
 ADD ./get-pip.py /opt/get-pip.py
 ADD ./.pydistutils.cfg /root/.pydistutils.cfg
-#COPY ./start-elastalert.sh ${BIN_DIR}
 
 # install dependency
 RUN set -x && apt-get update && \
@@ -58,34 +56,11 @@ RUN set -x && python setup.py install && \
 # Install Supervisor.
     easy_install supervisor && \
 # Make the start-script executable.
-    #chmod +x ${BIN_DIR}/start-elastalert.sh && \
 # Create directories. The /var/empty directory is used by openntpd.
     mkdir -p ${CONFIG_DIR} && \
     mkdir -p ${RULES_DIRECTORY} && \
     mkdir -p ${LOG_DIR} && \
-    mkdir -p /var/empty && \
-# Copy default configuration files to configuration directory.
-    #cp ${ELASTALERT_HOME}/config.yaml.example ${ELASTALERT_CONFIG} && \
-    #cp ${ELASTALERT_HOME}/supervisord.conf.example ${ELASTALERT_SUPERVISOR_CONF} && \
-# Elastalert configuration:
-    # Set the rule directory in the Elastalert config file to external rules directory.
-#    sed -i -e"s|rules_folder: [[:print:]]*|rules_folder: ${RULES_DIRECTORY}|g" ${ELASTALERT_CONFIG} && \
-    # Set the Elasticsearch host that Elastalert is to query.
-#    sed -i -e"s|es_host: [[:print:]]*|es_host: ${ELASTICSEARCH_HOST}|g" ${ELASTALERT_CONFIG} && \
-    # Set the port used by Elasticsearch at the above address.
-#    sed -i -e"s|es_port: [0-9]*|es_port: ${ELASTICSEARCH_PORT}|g" ${ELASTALERT_CONFIG} && \
-# Elastalert Supervisor configuration:
-    # Redirect Supervisor log output to a file in the designated logs directory.
-#    sed -i -e"s|logfile=.*log|logfile=${LOG_DIR}/elastalert_supervisord.log|g" ${ELASTALERT_SUPERVISOR_CONF} && \
-    # Redirect Supervisor stderr output to a file in the designated logs directory.
-#    sed -i -e"s|stderr_logfile=.*log|stderr_logfile=${LOG_DIR}/elastalert_stderr.log|g" ${ELASTALERT_SUPERVISOR_CONF} && \
-    # Modify the start-command.
-#    sed -i -e"s|python elastalert.py|python -m elastalert.elastalert --config ${ELASTALERT_CONFIG}|g" ${ELASTALERT_SUPERVISOR_CONF} && \
-# Copy the Elastalert configuration file to Elastalert home directory to be used when creating index first time an Elastalert container is launched.
-    cp ${ELASTALERT_CONFIG} ${ELASTALERT_HOME}/config.yaml && \
-# Clean up.
-# Add Elastalert to Supervisord.
-    supervisord -c ${ELASTALERT_SUPERVISOR_CONF}
+    mkdir -p /var/empty 
 
 # Define mount points.
 VOLUME [ "${CONFIG_DIR}", "${RULES_DIRECTORY}", "${LOG_DIR}", "${BIN_DIR}" ]
