@@ -41,6 +41,18 @@ services:
     depends_on:
       - elasticsearch
 
+  elastalert:
+    build: elastalert/
+    volumes:
+      - ./elastalert/opt/config/:/opt/config
+      - ./elastalert/opt/rules/:/opt/rules
+      - ./elastalert/opt/logs/:/opt/logs
+        #- ./elastalert/opt/bin/:/opt/bin
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+
 networks:
 
   elk:
