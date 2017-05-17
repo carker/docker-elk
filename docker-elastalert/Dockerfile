@@ -31,7 +31,7 @@ ENV BIN_DIR /opt/bin
 WORKDIR /opt
 
 # set pip sources
-RUN mkdir /root/.pip 
+RUN mkdir /root/.pip && mkdir ${BIN_DIR}
 ADD ./pip.conf /root/.pip/pip.conf
 ADD ./get-pip.py /opt/get-pip.py
 ADD ./.pydistutils.cfg /root/.pydistutils.cfg
@@ -68,4 +68,4 @@ RUN set -x && python setup.py install && \
 VOLUME [ "${CONFIG_DIR}", "${RULES_DIRECTORY}", "${LOG_DIR}" ]
 
 # Launch Elastalert when a container is started.
-CMD ["${BIN_DIR}/start-elastalert.sh"]
+CMD ["/opt/bin/start-elastalert.sh"]
