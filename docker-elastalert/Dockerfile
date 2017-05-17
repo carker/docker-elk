@@ -35,16 +35,18 @@ RUN mkdir /root/.pip
 ADD ./pip.conf /root/.pip/pip.conf
 ADD ./get-pip.py /opt/get-pip.py
 ADD ./.pydistutils.cfg /root/.pydistutils.cfg
+ADD ./start-elastalert.sh ${BIN_DIR}/start-elastalert.sh
 
 # install dependency
 RUN set -x && apt-get update && \
     apt-get upgrade -y && \
-    apt-get -y install python-setuptools python2.7 python-dev build-essential wget libssl-dev libffi-dev unzip bash-completion iputils-ping && \
+    apt-get -y install python-setuptools python2.7 python-dev build-essential wget libssl-dev libffi-dev unzip iputils-ping && \
     python get-pip.py && \
     wget ${ELASTALERT_URL} && \
     unzip *.zip && \
     rm *.zip && \
-    mv e* ${ELASTALERT_DIRECTORY_NAME}
+    mv e* ${ELASTALERT_DIRECTORY_NAME} && \
+    chmod +x ${BIN_DIR}/start-elastalert.sh
 
 WORKDIR ${ELASTALERT_HOME}
 
@@ -63,7 +65,7 @@ RUN set -x && python setup.py install && \
     mkdir -p /var/empty 
 
 # Define mount points.
-VOLUME [ "${CONFIG_DIR}", "${RULES_DIRECTORY}", "${LOG_DIR}", "${BIN_DIR}" ]
+VOLUME [ "${CONFIG_DIR}", "${RULES_DIRECTORY}", "${LOG_DIR}" ]
 
 # Launch Elastalert when a container is started.
 CMD ["${BIN_DIR}/start-elastalert.sh"]

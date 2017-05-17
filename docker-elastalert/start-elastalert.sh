@@ -40,5 +40,5 @@ else
 fi
 rm -f garbage_file
 
-echo "Starting Elastalert..."
+echo "Starting Elastalert...exec supervisord -c ${ELASTALERT_SUPERVISOR_CONF} -n"
 exec supervisord -c ${ELASTALERT_SUPERVISOR_CONF} -n
